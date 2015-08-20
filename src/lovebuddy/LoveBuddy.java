@@ -33,7 +33,7 @@ public class LoveBuddy {
     public WebDriver driver = new FirefoxDriver();
 
     public void login() {
-        driver.navigate().to("https://www.tumblr.com/login");
+        driver.navigate().to("https://www.tumblr.com/login"); 
 
         WebElement userName_editbox = driver.findElement(By.id("signup_email"));
         WebElement password_editbox = driver.findElement(By.id("signup_password"));
@@ -45,7 +45,7 @@ public class LoveBuddy {
 
     }
 
-    public void openTestSite() {
+    public void openNotes() {
         driver.get("http://knowndoorsunknown.tumblr.com/notes/127047825926/kzie9mQE3?from_c=1439957501");
         driver.findElement(By.cssSelector("body")).sendKeys(Keys.CONTROL + "t");// new tab open
         driver.findElement(By.cssSelector("body")).sendKeys(Keys.CONTROL + "w");// close the tab
@@ -73,7 +73,7 @@ public class LoveBuddy {
         Matcher m;
         List<String> userNames = new ArrayList<>();
         try {
-            for (int x = 1; x < 5; x++) {
+            for (int x = 1; x < 10000; x++) {
                 m = pattern.matcher(driver.findElement(By.xpath("html/body/ol/li[" + x + "]/span/a[1]")).getAttribute("href"));
                 Thread.currentThread().sleep(1000);
 
@@ -97,20 +97,27 @@ public class LoveBuddy {
     public void followUser(List<String> userNames) {
 
         userNames.stream().forEach((userName) -> {
-            System.out.println(userName);
-            driver.navigate().to("https://www.tumblr.com/search/" + userName);
-            if ("Follow".equals(driver.findElement(By.xpath(".//*[@id='search_actions_search']/div[4]/div/div/div[2]/div[1]/div/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div/button[2]")).getAttribute("class"))) {
-                System.out.println("System says: " + driver.findElement(By.xpath(".//*[@id='search_actions_search']/div[4]/div/div/div[2]/div[1]/div/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div/button[2]")).getText());
 
-                System.out.println("Followed");
-                driver.findElement(By.xpath(".//*[@id='search_actions_search']/div[4]/div/div/div[2]/div[1]/div/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div/button[2]")).click(); //click on user name
-                // driver.close();
-            } else {
-                System.out.println("System says: " + driver.findElement(By.xpath(".//*[@id='search_actions_search']/div[4]/div/div/div[2]/div[1]/div/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div/button[2]")).getAttribute("class"));
+            try {
 
-                System.out.println("Dont Follow");
-                //  driver.close();
+                Thread.currentThread().sleep(1000);
+                System.out.println(userName);
+                driver.navigate().to("https://www.tumblr.com/search/" + userName);
+                if ("Follow".equals(driver.findElement(By.xpath(".//*[@id='search_actions_search']/div[4]/div/div/div[2]/div[1]/div/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div/button[2]")).getText())) {
+                    // System.out.println("System says: " + driver.findElement(By.xpath(".//*[@id='search_actions_search']/div[4]/div/div/div[2]/div[1]/div/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div/button[2]")).getText());
 
+                    System.out.println("Followed user: " + userName);
+                    driver.findElement(By.xpath(".//*[@id='search_actions_search']/div[4]/div/div/div[2]/div[1]/div/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div/button[2]")).click(); //click on user name
+                    //driver.close();
+                } else {
+                    // System.out.println("System says: " + driver.findElement(By.xpath(".//*[@id='search_actions_search']/div[4]/div/div/div[2]/div[1]/div/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div/button[2]")).getAttribute("class"));
+
+                    System.out.println("Dont Follow");
+                    //  driver.close();
+
+                }
+
+            } catch (Exception e) {
             }
 
         });
@@ -121,7 +128,7 @@ public class LoveBuddy {
         // TODO code application logic here
         LoveBuddy webScrapper = new LoveBuddy(); //Here we are creating a instance of this class to make it a object from an idea 
         webScrapper.login();
-        webScrapper.openTestSite(); // Calling the method openTestSite which will excute the browser to be open
+        webScrapper.openNotes(); // Calling the method openTestSite which will excute the browser to be open
         // webScrapper.scrollToBottom();
         webScrapper.getUsername();
     }
