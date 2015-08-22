@@ -9,6 +9,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -30,107 +31,25 @@ import org.openqa.selenium.Keys;
  */
 public class LoveBuddy {
 
-    public WebDriver driver = new FirefoxDriver();
-
-    public void login() {
-        driver.navigate().to("https://www.tumblr.com/login"); 
-
-        WebElement userName_editbox = driver.findElement(By.id("signup_email"));
-        WebElement password_editbox = driver.findElement(By.id("signup_password"));
-        WebElement submit_button = driver.findElement(By.xpath(".//*[@id='signup_forms_submit']"));
-
-        userName_editbox.sendKeys("freshfresh91@gmail.com");
-        password_editbox.sendKeys("mastergeekz");
-        submit_button.click();
-
-    }
-
-    public void openNotes() {
-        driver.get("http://knowndoorsunknown.tumblr.com/notes/127047825926/kzie9mQE3?from_c=1439957501");
-        driver.findElement(By.cssSelector("body")).sendKeys(Keys.CONTROL + "t");// new tab open
-        driver.findElement(By.cssSelector("body")).sendKeys(Keys.CONTROL + "w");// close the tab
-
-    }
-
-    public void scrollToBottom() {
-        //driver.findElement(By.xpath(".//*[@id='search_posts']/article[2]/div/div[1]/div/div/span")).click();
-        for (int x = 0; x < 1000; x++) {
-            try {
-                driver.findElement(By.xpath(".//*[@id='more_notes_127047825926']/a")).click();
-                Thread.currentThread().sleep(1000);
-            } catch (Exception e) {
-                System.out.println("Fail");
-            }
-
-        }
-
-    }
-
-    public void getUsername() {
-        String userName = "";
-        Pattern pattern = Pattern.compile("http:\\/\\/(.*)\\.tumblr\\.com.*");
-        // Get matcher on this String.
-        Matcher m;
-        List<String> userNames = new ArrayList<>();
-        try {
-            for (int x = 1; x < 10000; x++) {
-                m = pattern.matcher(driver.findElement(By.xpath("html/body/ol/li[" + x + "]/span/a[1]")).getAttribute("href"));
-                Thread.currentThread().sleep(1000);
-
-                // If it matches, get and display group values.
-                if (m.matches()) {
-                    userNames.add(m.group(1));// = m.group(1);
-                }
-
-                //driver.findElement(By.xpath("html/body/ol/li[1]/span/a[1]")).click(); //click on user name
-                Thread.currentThread().sleep(1000);
-                //  followUser(userName);
-            }
-        } catch (Exception e) {
-            System.out.println("Fail");
-        }
-
-        followUser(userNames);
-
-    }
-
-    public void followUser(List<String> userNames) {
-
-        userNames.stream().forEach((userName) -> {
-
-            try {
-
-                Thread.currentThread().sleep(1000);
-                System.out.println(userName);
-                driver.navigate().to("https://www.tumblr.com/search/" + userName);
-                if ("Follow".equals(driver.findElement(By.xpath(".//*[@id='search_actions_search']/div[4]/div/div/div[2]/div[1]/div/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div/button[2]")).getText())) {
-                    // System.out.println("System says: " + driver.findElement(By.xpath(".//*[@id='search_actions_search']/div[4]/div/div/div[2]/div[1]/div/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div/button[2]")).getText());
-
-                    System.out.println("Followed user: " + userName);
-                    driver.findElement(By.xpath(".//*[@id='search_actions_search']/div[4]/div/div/div[2]/div[1]/div/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div/button[2]")).click(); //click on user name
-                    //driver.close();
-                } else {
-                    // System.out.println("System says: " + driver.findElement(By.xpath(".//*[@id='search_actions_search']/div[4]/div/div/div[2]/div[1]/div/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div/button[2]")).getAttribute("class"));
-
-                    System.out.println("Dont Follow");
-                    //  driver.close();
-
-                }
-
-            } catch (Exception e) {
-            }
-
-        });
-
-    }
-
     public static void main(String[] args) {
-        // TODO code application logic here
-        LoveBuddy webScrapper = new LoveBuddy(); //Here we are creating a instance of this class to make it a object from an idea 
-        webScrapper.login();
-        webScrapper.openNotes(); // Calling the method openTestSite which will excute the browser to be open
-        // webScrapper.scrollToBottom();
-        webScrapper.getUsername();
+        Scanner in = new Scanner(System.in); // used to accept user input
+        String note; // To store url string
+        int userChoice; // to store user input
+        Tumble tumble = new Tumble(); // create a instance of the tumble class
+        System.out.println("Enter 1 for Tumble"); // prompt user to comfirm to run tumble
+        userChoice = in.nextInt(); // accept user input
+       
+        if (userChoice == 1) { // if user choice equals 1
+            System.out.println("Tumble has started"); // prompt user that tumble has started
+            tumble.login(); // accept login 
+            System.out.println("Enter a note url"); // prompt user to enter in note url 
+            note = in.next();
+            tumble.openNotes(note); // Calling the method openTestSite which will excute the browser to be open
+            tumble.scrollToBottom(); // calling method to scroll down to bottom of page to get all of the notes
+            tumble.getUsername(); // get the usernames and follow the users
+        } else {
+// to do code 
+        }
     }
 
 }
